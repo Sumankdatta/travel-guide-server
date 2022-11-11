@@ -44,6 +44,19 @@ async function run() {
 
         // reviews api
 
+        app.get('/reviews',async(req,res)=>{
+            let query={};
+
+            if(req.query.email){
+                query={
+                    email:req.query.email
+                }
+            }
+            const cursor=reviwesCollection.find(query);
+            const rewiews =await cursor.toArray();
+            res.send(rewiews)
+        })
+
         app.post('/reviews',async(req,res)=>{
             const review=req.body;
             const result = await reviwesCollection.insertOne(review);
