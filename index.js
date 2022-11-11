@@ -17,48 +17,48 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function run() {
     try {
-        const serviceCollection=client.db('travelguide').collection('services');
-        const reviwesCollection=client.db('travelguide').collection('reviews');
+        const serviceCollection = client.db('travelguide').collection('services');
+        const reviwesCollection = client.db('travelguide').collection('reviews');
 
 
-        app.get('/services',async(req,res)=>{
-            const query={}
-            const cursor=serviceCollection.find(query);
-            const services =await cursor.limit(3).toArray();
+        app.get('/services', async (req, res) => {
+            const query = {}
+            const cursor = serviceCollection.find(query);
+            const services = await cursor.limit(3).toArray();
             res.send(services)
         })
-        app.get('/servicesall',async(req,res)=>{
-            const query={}
-            const cursor=serviceCollection.find(query);
-            const services =await cursor.toArray();
+        app.get('/servicesall', async (req, res) => {
+            const query = {}
+            const cursor = serviceCollection.find(query);
+            const services = await cursor.toArray();
             res.send(services)
         })
-       
 
-        app.get('/services/:id',async(req,res)=>{
-            const id=req.params.id;
-            const query={_id: ObjectId(id)}
-            const service=await serviceCollection.findOne(query);
+
+        app.get('/services/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const service = await serviceCollection.findOne(query);
             res.send(service)
         })
 
         // reviews api
 
-        app.get('/reviews',async(req,res)=>{
-            let query={};
+        app.get('/reviews', async (req, res) => {
+            let query = {};
 
-            if(req.query.email){
-                query={
-                    email:req.query.email
+            if (req.query.email) {
+                query = {
+                    email: req.query.email
                 }
             }
-            const cursor=reviwesCollection.find(query);
-            const rewiews =await cursor.toArray();
+            const cursor = reviwesCollection.find(query);
+            const rewiews = await cursor.toArray();
             res.send(rewiews)
         })
 
-        app.post('/reviews',async(req,res)=>{
-            const review=req.body;
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
             const result = await reviwesCollection.insertOne(review);
             res.send(result)
         })
